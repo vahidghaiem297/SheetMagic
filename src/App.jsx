@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './index.css';
