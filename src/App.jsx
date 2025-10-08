@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config/api';
+import { API_ENDPOINTS } from "../src/config/api";
 import { lightTheme, darkTheme, applyTheme, getCurrentTheme, saveTheme } from './themeConfig';
 import { useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
