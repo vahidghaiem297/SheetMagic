@@ -484,7 +484,6 @@ function App() {
 
   try {
     const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, { // بدون ${}
-      responseType: 'blob',
       timeout: 60000,
     });
 
