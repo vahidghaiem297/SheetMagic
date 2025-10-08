@@ -7,10 +7,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false
+    sourcemap: false,
   },
   server: {
     port: 5173,
-    host: true
+    host: true,
+    // proxy را حذف کنید چون مستقیماً به backend وصل می‌شویم
   }
 })

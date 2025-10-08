@@ -478,31 +478,32 @@ function App() {
     await showSuccess('حذف شد', 'پروژه با موفقیت حذف شد');
   };
 
-  const extractColumnsFromFile = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
+ const extractColumnsFromFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
 
-    try {
-      const response = await axios.post(`${API_ENDPOINTS.GET_COLUMNS}`, formData, {
-        timeout: 0,
-      });
+  try {
+    const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, { // بدون ${}
+      responseType: 'blob',
+      timeout: 60000,
+    });
 
-      setAvailableColumns((prev) => {
-        const merged = [...prev, ...response.data.columns];
-        return [...new Set(merged)];
-      });
-    } catch (error) {
-      console.error(`Error extracting columns from ${file.name}:`, error?.message || error);
-      if (files.length <= 1) setAvailableColumns([]);
-      if (error.code === 'ECONNABORTED') {
-        await showError('خطا', 'پاسخ سرور دیر شد (Timeout). لطفاً دوباره تلاش کنید.');
-      } else if (error.response) {
-        await showError('خطا', `خطا در خواندن فایل ${file.name}: ${error.response.data?.error || 'Server error'}`);
-      } else {
-        await showError('خطا', 'اتصال به سرور برقرار نشد.');
-      }
+    setAvailableColumns((prev) => {
+      const merged = [...prev, ...response.data.columns];
+      return [...new Set(merged)];
+    });
+  } catch (error) {
+    console.error(`Error extracting columns from ${file.name}:`, error?.message || error);
+    if (files.length <= 1) setAvailableColumns([]);
+    if (error.code === 'ECONNABORTED') {
+      await showError('خطا', 'پاسخ سرور دیر شد (Timeout). لطفاً دوباره تلاش کنید.');
+    } else if (error.response) {
+      await showError('خطا', `خطا در خواندن فایل ${file.name}: ${error.response.data?.error || 'Server error'}`);
+    } else {
+      await showError('خطا', 'اتصال به سرور برقرار نشد.');
     }
-  };
+  }
+};
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
