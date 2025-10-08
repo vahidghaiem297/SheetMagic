@@ -502,7 +502,7 @@ const extractColumnsFromFile = async (file) => {
   formData.append('file', file);
 
   try {
-      response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
+    const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
       timeout: 30000,
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -520,9 +520,12 @@ const extractColumnsFromFile = async (file) => {
     if (files.length <= 1) setAvailableColumns([]);
     
     let errorMessage = 'خطا در اتصال به سرور';
+    
+    // استفاده از error به جای response
     if (error.code === 'ECONNABORTED') {
       errorMessage = 'پاسخ سرور دیر شد. لطفاً دوباره تلاش کنید.';
     } else if (error.response) {
+      // ✅ اینجا از error.response استفاده می‌کنیم
       errorMessage = `خطای سرور: ${error.response.data?.error || error.response.statusText}`;
     } else if (error.request) {
       errorMessage = 'اتصال به سرور برقرار نشد. لطفاً از روشن بودن سرور اطمینان حاصل کنید.';
