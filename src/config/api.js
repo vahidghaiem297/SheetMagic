@@ -8,7 +8,7 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
-// ✅ اصلاح نام endpointها + اضافه کردن endpoint نظرسنجی
+// ✅ endpointهای کامل
 const API_ENDPOINTS = {
   MERGE_FILES: `${API_BASE_URL}/merge-files/`,
   CONVERT_FORMAT: `${API_BASE_URL}/convert-format/`,
