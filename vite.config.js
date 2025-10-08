@@ -7,13 +7,10 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,
-    minify: 'terser',
-    rollupOptions: {
-      external: ['react-dropzone'] // اگر نیاز است
-    }
+    sourcemap: false
   },
-  optimizeDeps: {
-    include: ['react-dropzone']
+  server: {
+    port: 5173,
+    host: true
   }
 })
