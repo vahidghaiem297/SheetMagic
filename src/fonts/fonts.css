@@ -1,0 +1,34 @@
+/* فونت وزیرمتن - نازنین */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('vazirmatn/Vazirmatn-RD[wght].ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* فونت انگلیسی زیبا - Inter */
+@font-face {
+  font-family: 'Inter';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+  font-display: swap;
+}
+
+/* اعمال فونت به کل برنامه */
+body {
+  font-family: 'Vazirmatn', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* تنظیمات اضافی برای نمایش بهتر فونت فارسی */
+.app-container {
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+button, input, select, textarea {
+  font-family: 'Vazirmatn', 'Inter', sans-serif;
+}
