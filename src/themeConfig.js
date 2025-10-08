@@ -83,7 +83,7 @@ export const darkTheme = {
     
     // رنگ‌های پس‌زمینه
     bgcolor: '#0F2027',
-    surface: '#1a1f3c',
+    surface: '#fff',
     headerBg: '#0d1a30',
     cardBg: 'rgba(3, 30, 54, 0.8)',
     uploadArea: 'transparent',
