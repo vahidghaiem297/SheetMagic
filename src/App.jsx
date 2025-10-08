@@ -503,7 +503,7 @@ const extractColumnsFromFile = async (file) => {
 
   try {
       response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
-      timeout: 120000,
+      timeout: 30000,
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -612,7 +612,7 @@ const extractColumnsFromFile = async (file) => {
     setIsProcessing(true);
 
     try {
-      let response;
+      let response; // ✅ این خط را اضافه کنید
       const formData = new FormData();
 
       switch (selectedOperation) {
@@ -623,7 +623,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.MERGE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            timeout: 120000,
+            timeout: 30000,
           });
           break;
 
@@ -653,7 +653,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.COMPARE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            timeout: 120000,
+            timeout: 30000,
           });
           break;
 
@@ -692,7 +692,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.JOIN_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            timeout: 120000,
+            timeout: 30000,
           });
           break;
 
