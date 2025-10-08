@@ -1,3 +1,4 @@
+import { API_ENDPOINTS, API_BASE_URL } from "./config/api.js";
 import { API_ENDPOINTS } from "./config/api.js";
 import { lightTheme, darkTheme, applyTheme, getCurrentTheme, saveTheme, initializeTheme } from './themeConfig.js';
 import { useState, useEffect, useRef } from 'react';
@@ -77,18 +78,6 @@ function App() {
   const joinRightKeyRef = useRef(null);
   const joinTypeRef = useRef(null);
 
-  // در App.jsx
-const checkServerHealth = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/health`, { timeout: 10000 });
-    console.log('✅ سرور در دسترس است:', response.data);
-    return true;
-  } catch (error) {
-    console.error('❌ سرور در دسترس نیست:', error);
-    await showError('خطای اتصال', 'سرور در دسترس نیست. لطفاً بعداً تلاش کنید.');
-    return false;
-  }
-};
 
 // در useEffect اصلی
 useEffect(() => {
@@ -514,7 +503,7 @@ const extractColumnsFromFile = async (file) => {
   formData.append('file', file);
 
   try {
-    const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
+      response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
       timeout: 30000,
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -632,7 +621,7 @@ const extractColumnsFromFile = async (file) => {
           files.forEach((file, index) => {
             formData.append(`file${index + 1}`, file);
           });
-          response = await axios.post(`${API_ENDPOINTS.MERGE_FILES}`, formData, {
+          response = await axios.post(API_ENDPOINTS.MERGE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             timeout: 120000,
@@ -642,7 +631,7 @@ const extractColumnsFromFile = async (file) => {
         case 'remove-duplicates':
           formData.append('file', files[0]);
           if (selectedColumn) formData.append('column_name', selectedColumn);
-          response = await axios.post(`${API_ENDPOINTS.REMOVE_DUPLICATES}`, formData, {
+          response = await axios.post(API_ENDPOINTS.REMOVE_DUPLICATES, formData, {
             responseType: 'blob',
             timeout: 60000,
           });
@@ -651,7 +640,7 @@ const extractColumnsFromFile = async (file) => {
         case 'convert':
           formData.append('file', files[0]);
           formData.append('target_format', targetFormat);
-          response = await axios.post(`${API_ENDPOINTS.CONVERT_FORMAT}`, formData, {
+          response = await axios.post(API_ENDPOINTS.CONVERT_FORMAT, formData, {
             responseType: 'blob',
             timeout: 60000,
           });
@@ -662,7 +651,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('file2', files[1]);
           formData.append('compare_type', comparisonKey ? 'based_on_key' : 'all_columns');
           if (comparisonKey) formData.append('key_column', comparisonKey);
-          response = await axios.post(`${API_ENDPOINTS.COMPARE_FILES}`, formData, {
+          response = await axios.post(API_ENDPOINTS.COMPARE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             timeout: 120000,
@@ -678,7 +667,7 @@ const extractColumnsFromFile = async (file) => {
           } else {
             formData.append('params', JSON.stringify({}));
           }
-          response = await axios.post(`${API_ENDPOINTS.CLEAN_DATA}`, formData, {
+          response = await axios.post(API_ENDPOINTS.CLEAN_DATA, formData, {
             responseType: 'blob',
             timeout: 120000,
           });
@@ -689,7 +678,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('index_column', pivotParams.indexColumn);
           formData.append('values_column', pivotParams.valuesColumn);
           formData.append('aggregation', pivotParams.aggregation);
-          response = await axios.post(`${API_ENDPOINTS.CREATE_PIVOT}`, formData, {
+          response = await axios.post(API_ENDPOINTS.CREATE_PIVOT, formData, {
             responseType: 'blob',
             timeout: 120000,
           });
@@ -701,7 +690,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('left_key', joinParams.leftKey);
           formData.append('right_key', joinParams.rightKey);
           formData.append('join_type', joinParams.joinType);
-          response = await axios.post(`${API_ENDPOINTS.JOIN_FILES}`, formData, {
+          response = await axios.post(API_ENDPOINTS.JOIN_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             timeout: 120000,
