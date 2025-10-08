@@ -1,11 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   base: '/SheetMagic/',
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    rollupOptions: {
+      external: ['react-dropzone'] // اگر نیاز است
+    }
+  },
+  optimizeDeps: {
+    include: ['react-dropzone']
   }
 })
