@@ -93,8 +93,8 @@ export const darkTheme = {
     textSecondary: '#b8b9c7',
     textInverse: '#ffffff',
     textMuted: '#8a8da3',
-    optTitles: '#ffffff', // عناوین روشن برای تم تاریک
-    swalTitle: '#ffffff', // عنوان روشن برای SweetAlert
+    optTitles: '#212121', // عناوین روشن برای تم تاریک
+    swalTitle: '#212121', // عنوان روشن برای SweetAlert
     
     // رنگ‌های وضعیت
     success: '#5cdb60',
