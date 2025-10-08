@@ -484,7 +484,7 @@ function App() {
 
   try {
     const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, { // بدون ${}
-      timeout: 60000,
+      timeout: 0,
     });
 
     setAvailableColumns((prev) => {
