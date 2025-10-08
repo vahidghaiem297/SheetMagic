@@ -78,7 +78,10 @@ function App() {
   const joinTypeRef = useRef(null);
 
 
-
+// در useEffect اصلی
+useEffect(() => {
+  initializeTheme();
+}, []);
   // اضافه کردن interceptor برای مدیریت خطاهای axios
 useEffect(() => {
   const responseInterceptor = axios.interceptors.response.use(
