@@ -1216,7 +1216,7 @@ footer {
 .startAgainBtn:hover,
 .startAgainBtn:focus {
   background-color: var(--primary) !important;
-  color: #fff;
+  color: #fff !important;
 }
 
 button>i {
