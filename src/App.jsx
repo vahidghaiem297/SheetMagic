@@ -1,5 +1,5 @@
-import { API_ENDPOINTS } from "../src/config/api";
-import { lightTheme, darkTheme, applyTheme, getCurrentTheme, saveTheme } from './themeConfig';
+import { API_ENDPOINTS } from "./config/api.js";
+import { lightTheme, darkTheme, applyTheme, getCurrentTheme, saveTheme } from './themeConfig.js';
 import { useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';

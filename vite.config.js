@@ -3,9 +3,12 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/SheetMagic/',
+  base: 'https://github.com/vahidghaiem297/SheetMagic.git',
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: 'terser',
     rollupOptions: {
       external: ['react-dropzone'] // اگر نیاز است
     }
