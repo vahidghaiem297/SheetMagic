@@ -1,25 +1,21 @@
 // config/api.js
-// تشخیص خودکار آدرس API بر اساس محیط
 
+// تشخیص خودکار آدرس API بر اساس محیط
 const getApiBaseUrl = () => {
-  // اگر در GitHub Pages هستیم
-  if (window.location.hostname.includes('github.io')) {
+  // همیشه از HTTPS استفاده کن
+  if (window.location.hostname.includes('github.io') || 
+      window.location.protocol === 'https:') {
     return "https://sheetmagic-backend-production.up.railway.app";
   }
   
-  // اگر در localhost هستیم (توسعه)
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return "https://sheetmagic-backend-production.up.railway.app"; // تغییر به HTTPS
-  }
-  
-  // برای سایر موارد (production)
+  // برای localhost
   return "https://sheetmagic-backend-production.up.railway.app";
 };
 
+// تعریف متغیرها
 const API_BASE_URL = getApiBaseUrl();
 
-export const API_ENDPOINTS = {
-  // آدرس کامل endpoint ها
+const API_ENDPOINTS = {
   MERGE_FILES: `${API_BASE_URL}/merge-files`,
   CONVERT_FORMAT: `${API_BASE_URL}/convert-format`,
   REMOVE_DUPLICATES: `${API_BASE_URL}/remove-duplicates`,
@@ -30,8 +26,10 @@ export const API_ENDPOINTS = {
   JOIN_FILES: `${API_BASE_URL}/join-files`,
 };
 
-// برای دیباگ و بررسی آدرس‌ها
-console.log('API Base URL:', API_BASE_URL);
-console.log('API Endpoints:', API_ENDPOINTS);
+// برای دیباگ
+console.log('🚀 API Base URL:', API_BASE_URL);
+console.log('📡 API Endpoints:', API_ENDPOINTS);
 
+// export
+export { API_ENDPOINTS, API_BASE_URL };
 export default API_BASE_URL;
