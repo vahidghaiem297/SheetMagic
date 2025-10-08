@@ -11,6 +11,14 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './index.css';
 import './fonts/fonts.css';
 
+// تابع برای مدیریت مسیر تصاویر
+const getImagePath = (filename) => {
+  if (window.location.hostname.includes('github.io')) {
+    return `./img/${filename}`;
+  }
+  return `../src/img/${filename}`;
+};
+
 function App() {
   const [currentTheme, setCurrentTheme] = useState(getCurrentTheme());
   const [currentStep, setCurrentStep] = useState(1);
@@ -67,8 +75,6 @@ function App() {
   const joinLeftKeyRef = useRef(null);
   const joinRightKeyRef = useRef(null);
   const joinTypeRef = useRef(null);
-
-
 
   const toggleTheme = () => {
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
@@ -216,15 +222,15 @@ function App() {
     const loadSelect2 = () => {
       if (!window.jQuery) {
         const jqueryScript = document.createElement('script');
-        jqueryScript.src = 'https://code.jquery.com/jquery-3.6.0.min.js';
+        jqueryScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js';
 
         jqueryScript.onload = () => {
           const select2Script = document.createElement('script');
-          select2Script.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
+          select2Script.src = 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js';
           select2Script.onload = () => {
             const select2Css = document.createElement('link');
             select2Css.rel = 'stylesheet';
-            select2Css.href = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css';
+            select2Css.href = 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css';
             document.head.appendChild(select2Css);
 
             initializeAllSelect2();
@@ -471,7 +477,7 @@ function App() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/get-columns/`, formData, {
+      const response = await axios.post(`${API_ENDPOINTS.GET_COLUMNS}`, formData, {
         timeout: 0,
       });
 
@@ -564,7 +570,6 @@ function App() {
       await showWarning('خطا', 'برای حذف تکراری‌ها فقط یک فایل نیاز است');
       return;
     }
-    // ... سایر اعتبارسنجی‌ها
 
     const confirm = await showConfirm('آیا مطمئن هستید؟', 'عملیات پردازش بر روی فایل‌های انتخاب شده انجام خواهد شد.');
     if (!confirm.isConfirmed) return;
@@ -580,7 +585,7 @@ function App() {
           files.forEach((file, index) => {
             formData.append(`file${index + 1}`, file);
           });
-          response = await axios.post(`${API_BASE_URL}/merge-files/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.MERGE_FILES}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             timeout: 120000,
@@ -590,7 +595,7 @@ function App() {
         case 'remove-duplicates':
           formData.append('file', files[0]);
           if (selectedColumn) formData.append('column_name', selectedColumn);
-          response = await axios.post(`${API_BASE_URL}/remove-duplicates/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.REMOVE_DUPLICATES}`, formData, {
             responseType: 'blob',
             timeout: 60000,
           });
@@ -599,7 +604,7 @@ function App() {
         case 'convert':
           formData.append('file', files[0]);
           formData.append('target_format', targetFormat);
-          response = await axios.post(`${API_BASE_URL}/convert-format/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.CONVERT_FORMAT}`, formData, {
             responseType: 'blob',
             timeout: 60000,
           });
@@ -610,7 +615,7 @@ function App() {
           formData.append('file2', files[1]);
           formData.append('compare_type', comparisonKey ? 'based_on_key' : 'all_columns');
           if (comparisonKey) formData.append('key_column', comparisonKey);
-          response = await axios.post(`${API_BASE_URL}/compare-files/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.COMPARE_FILES}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             timeout: 120000,
@@ -626,7 +631,7 @@ function App() {
           } else {
             formData.append('params', JSON.stringify({}));
           }
-          response = await axios.post(`${API_BASE_URL}/clean-data/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.CLEAN_DATA}`, formData, {
             responseType: 'blob',
             timeout: 120000,
           });
@@ -637,7 +642,7 @@ function App() {
           formData.append('index_column', pivotParams.indexColumn);
           formData.append('values_column', pivotParams.valuesColumn);
           formData.append('aggregation', pivotParams.aggregation);
-          response = await axios.post(`${API_BASE_URL}/create-pivot/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.CREATE_PIVOT}`, formData, {
             responseType: 'blob',
             timeout: 120000,
           });
@@ -649,7 +654,7 @@ function App() {
           formData.append('left_key', joinParams.leftKey);
           formData.append('right_key', joinParams.rightKey);
           formData.append('join_type', joinParams.joinType);
-          response = await axios.post(`${API_BASE_URL}/join-files/`, formData, {
+          response = await axios.post(`${API_ENDPOINTS.JOIN_FILES}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
             timeout: 120000,
@@ -670,7 +675,6 @@ function App() {
       if (selectedOperation === 'merge') fileName = 'merged_file.xlsx';
       else if (selectedOperation === 'remove-duplicates') fileName = 'deduplicated_file.xlsx';
       else if (selectedOperation === 'convert') fileName = targetFormat === 'excel' ? 'converted_file.xlsx' : 'converted_file.csv';
-      else if (selectedOperation === 'extract-pdf') fileName = 'extracted_tables.xlsx';
       else if (selectedOperation === 'compare') fileName = 'comparison_result.xlsx';
       else if (selectedOperation === 'clean-data') fileName = 'cleaned_data.xlsx';
       else if (selectedOperation === 'pivot-table') fileName = 'pivot_table.xlsx';
@@ -796,7 +800,7 @@ function App() {
                   onClick={() => setShowSaveModal(true)}
                   disabled={!selectedOperation || files.length === 0}
                 >
-                  <img src="../src/img/save.png" alt="" />
+                  <img src={getImagePath("save.png")} alt="ذخیره" />
                 </button>
 
                 <button
@@ -804,7 +808,7 @@ function App() {
                   onClick={() => setShowLoadModal(true)}
                   disabled={workflows.length === 0}
                 >
-                  <img src="../src/img/load.png" alt="" />
+                  <img src={getImagePath("load.png")} alt="بارگذاری" />
                 </button>
                 {/* دکمه تغییر تم */}
                 <div className="theme-toggler">
@@ -814,9 +818,9 @@ function App() {
                     title={currentTheme === 'light' ? 'فعال کردن تم دارک' : 'فعال کردن تم لایت'}
                   >
                     {currentTheme === 'light' ? (
-                      <img src="../src/img/moon.png" alt="" />
+                      <img src={getImagePath("moon.png")} alt="تم تاریک" />
                     ) : (
-                      <img src="../src/img/contrast.png" alt="" />
+                      <img src={getImagePath("contrast.png")} alt="تم روشن" />
                     )}
                   </button>
                 </div>
@@ -878,7 +882,7 @@ function App() {
                 <div {...getRootProps()} className={`upload-area ${isDragActive ? 'drag-active' : ''}`}>
                   <input {...getInputProps()} />
                   <div className="upload-icon">
-                    <img src="../src/img/upload.gif" alt="" />
+                    <img src={getImagePath("upload.gif")} alt="آپلود" />
                   </div>
                   <p>فایل‌ها را اینجا رها کنید یا برای انتخاب کلیک کنید</p>
                   <small>فرمت‌های پشتیبانی شده: Excel (.xlsx, .xls), CSV (.csv)</small>
@@ -948,7 +952,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('merge')}>
                           <div className="operation-icon">
-                            <img src="../src/img/merge.gif" alt="" />
+                            <img src={getImagePath("merge.gif")} alt="ادغام" />
                           </div>
                           <h3>ادغام فایل‌ها</h3>
                           <p>ادغام چندین فایل اکسل در یک فایل واحد</p>
@@ -961,7 +965,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
                         </button>
                       </div>
                     </div>
@@ -972,7 +976,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('remove-duplicates')}>
                           <div className="operation-icon">
-                            <img src="../src/img/file.gif" alt="" />
+                            <img src={getImagePath("file.gif")} alt="حذف تکراری‌ها" />
                           </div>
                           <h3>حذف تکراری‌ها</h3>
                           <p>حذف سطرهای تکراری بر اساس ستون مشخص یا تمام داده‌ها</p>
@@ -985,7 +989,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
 
                         </button>
                       </div>
@@ -997,7 +1001,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('convert')}>
                           <div className="operation-icon">
-                            <img src="../src/img/convert.gif" alt="" />
+                            <img src={getImagePath("convert.gif")} alt="تبدیل فرمت" />
                           </div>
                           <h3>تبدیل فرمت</h3>
                           <p>تبدیل بین فرمت‌های CSV و Excel</p>
@@ -1010,7 +1014,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
                         </button>
                       </div>
                     </div>
@@ -1023,7 +1027,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('compare')}>
                           <div className="operation-icon">
-                            <img src="../src/img/ab-testing.gif" alt="" />
+                            <img src={getImagePath("ab-testing.gif")} alt="مقایسه" />
                           </div>
                           <h3>مقایسه فایل‌ها</h3>
                           <p>پیدا کردن تفاوت‌ها بین دو فایل اکسل</p>
@@ -1036,7 +1040,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
                         </button>
                       </div>
                     </div>
@@ -1047,7 +1051,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('clean-data')}>
                           <div className="operation-icon">
-                            <img src="../src/img/clean-up.gif" alt="" />
+                            <img src={getImagePath("clean-up.gif")} alt="تمیز کردن داده" />
                           </div>
                           <h3>تمیز کردن داده</h3>
                           <p>استانداردسازی و تمیز کردن داده‌ها</p>
@@ -1060,7 +1064,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
                         </button>
                       </div>
                     </div>
@@ -1071,7 +1075,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('pivot-table')}>
                           <div className="operation-icon">
-                            <img src="../src/img/table.gif" alt="" />
+                            <img src={getImagePath("table.gif")} alt="جدول محوری" />
                           </div>
                           <h3>جدول محوری</h3>
                           <p>ایجاد جدول محوری برای تجزیه و تحلیل داده‌ها</p>
@@ -1084,7 +1088,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
                         </button>
                       </div>
                     </div>
@@ -1095,7 +1099,7 @@ function App() {
                       <div className="operation-header">
                         <div className="operation-content" onClick={() => handleOperationSelect('join-data')}>
                           <div className="operation-icon">
-                            <img src="../src/img/broken-link.gif" alt="" />
+                            <img src={getImagePath("broken-link.gif")} alt="ترکیب داده" />
                           </div>
                           <h3>ترکیب داده‌ها</h3>
                           <p>JOIN کردن جداول بر اساس کلید مشترک</p>
@@ -1108,7 +1112,7 @@ function App() {
                           }}
                           title="راهنما"
                         >
-                          <img src="../src/img/question.gif" alt="" />
+                          <img src={getImagePath("question.gif")} alt="راهنما" />
                         </button>
                       </div>
                     </div>
