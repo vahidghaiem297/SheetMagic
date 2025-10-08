@@ -13,10 +13,7 @@ import './fonts/fonts.css';
 
 // تابع برای مدیریت مسیر تصاویر
 const getImagePath = (filename) => {
-  if (window.location.hostname.includes('github.io')) {
-    return `./img/${filename}`;
-  }
-  return `../src/img/${filename}`;
+  return `/img/${filename}`;
 };
 
 function App() {

@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // این رو تغییر بدید
+  base: '/SheetMagic/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -12,5 +12,7 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true
-  }
+  },
+  // برای مدیریت بهتر assets
+  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg']
 })
