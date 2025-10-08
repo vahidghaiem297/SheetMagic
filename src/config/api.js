@@ -18,7 +18,6 @@ const API_ENDPOINTS = {
   CLEAN_DATA: `${API_BASE_URL}/clean-data/`,
   CREATE_PIVOT: `${API_BASE_URL}/create-pivot/`,
   JOIN_FILES: `${API_BASE_URL}/join-files/`,
-  SUBMIT_FEEDBACK: `${API_BASE_URL}/submit-feedback/`,
 };
 
 console.log('🚀 API Configuration Loaded');
