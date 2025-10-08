@@ -77,6 +77,37 @@ function App() {
   const joinRightKeyRef = useRef(null);
   const joinTypeRef = useRef(null);
 
+  // در App.jsx
+const checkServerHealth = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/health`, { timeout: 10000 });
+    console.log('✅ سرور در دسترس است:', response.data);
+    return true;
+  } catch (error) {
+    console.error('❌ سرور در دسترس نیست:', error);
+    await showError('خطای اتصال', 'سرور در دسترس نیست. لطفاً بعداً تلاش کنید.');
+    return false;
+  }
+};
+
+// در useEffect اصلی
+useEffect(() => {
+  checkServerHealth();
+}, []);
+  // اضافه کردن interceptor برای مدیریت خطاهای axios
+useEffect(() => {
+  const responseInterceptor = axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      console.error('Axios Error:', error);
+      return Promise.reject(error);
+    }
+  );
+
+  return () => {
+    axios.interceptors.response.eject(responseInterceptor);
+  };
+}, []);
   // در useEffect اولیه:
   useEffect(() => {
     initializeTheme(); // این جایگزین کد قبلی شود
@@ -478,32 +509,42 @@ function App() {
     await showSuccess('حذف شد', 'پروژه با موفقیت حذف شد');
   };
 
- const extractColumnsFromFile = async (file) => {
+const extractColumnsFromFile = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
 
   try {
-    const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, { // بدون ${}
-      timeout: 0,
+    const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
+      timeout: 30000,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     });
 
-    setAvailableColumns((prev) => {
-      const merged = [...prev, ...response.data.columns];
-      return [...new Set(merged)];
-    });
-  } catch (error) {
-    console.error(`Error extracting columns from ${file.name}:`, error?.message || error);
-    if (files.length <= 1) setAvailableColumns([]);
-    if (error.code === 'ECONNABORTED') {
-      await showError('خطا', 'پاسخ سرور دیر شد (Timeout). لطفاً دوباره تلاش کنید.');
-    } else if (error.response) {
-      await showError('خطا', `خطا در خواندن فایل ${file.name}: ${error.response.data?.error || 'Server error'}`);
-    } else {
-      await showError('خطا', 'اتصال به سرور برقرار نشد.');
+    if (response.data && response.data.columns) {
+      setAvailableColumns((prev) => {
+        const merged = [...prev, ...response.data.columns];
+        return [...new Set(merged)];
+      });
     }
+  } catch (error) {
+    console.error(`Error extracting columns from ${file.name}:`, error);
+    if (files.length <= 1) setAvailableColumns([]);
+    
+    let errorMessage = 'خطا در اتصال به سرور';
+    if (error.code === 'ECONNABORTED') {
+      errorMessage = 'پاسخ سرور دیر شد. لطفاً دوباره تلاش کنید.';
+    } else if (error.response) {
+      errorMessage = `خطای سرور: ${error.response.data?.error || error.response.statusText}`;
+    } else if (error.request) {
+      errorMessage = 'اتصال به سرور برقرار نشد. لطفاً از روشن بودن سرور اطمینان حاصل کنید.';
+    } else {
+      errorMessage = error.message || 'خطای ناشناخته';
+    }
+    
+    await showError('خطا', errorMessage);
   }
 };
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
