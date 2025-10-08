@@ -78,24 +78,24 @@ function App() {
   const joinTypeRef = useRef(null);
 
 
-// در useEffect اصلی
-useEffect(() => {
-  initializeTheme();
-}, []);
+  // در useEffect اصلی
+  useEffect(() => {
+    initializeTheme();
+  }, []);
   // اضافه کردن interceptor برای مدیریت خطاهای axios
-useEffect(() => {
-  const responseInterceptor = axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      console.error('Axios Error:', error);
-      return Promise.reject(error);
-    }
-  );
+  useEffect(() => {
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        console.error('Axios Error:', error);
+        return Promise.reject(error);
+      }
+    );
 
-  return () => {
-    axios.interceptors.response.eject(responseInterceptor);
-  };
-}, []);
+    return () => {
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, []);
   // در useEffect اولیه:
   useEffect(() => {
     initializeTheme(); // این جایگزین کد قبلی شود
@@ -497,45 +497,45 @@ useEffect(() => {
     await showSuccess('حذف شد', 'پروژه با موفقیت حذف شد');
   };
 
-const extractColumnsFromFile = async (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
+  const extractColumnsFromFile = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  try {
-    const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
-      
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+    try {
+      const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
 
-    if (response.data && response.data.columns) {
-      setAvailableColumns((prev) => {
-        const merged = [...prev, ...response.data.columns];
-        return [...new Set(merged)];
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
+
+      if (response.data && response.data.columns) {
+        setAvailableColumns((prev) => {
+          const merged = [...prev, ...response.data.columns];
+          return [...new Set(merged)];
+        });
+      }
+    } catch (error) {
+      console.error(`Error extracting columns from ${file.name}:`, error);
+      if (files.length <= 1) setAvailableColumns([]);
+
+      let errorMessage = 'خطا در اتصال به سرور';
+
+      // استفاده از error به جای response
+      if (error.code === 'ECONNABORTED') {
+        errorMessage = 'پاسخ سرور دیر شد. لطفاً دوباره تلاش کنید.';
+      } else if (error.response) {
+        // ✅ اینجا از error.response استفاده می‌کنیم
+        errorMessage = `خطای سرور: ${error.response.data?.error || error.response.statusText}`;
+      } else if (error.request) {
+        errorMessage = 'اتصال به سرور برقرار نشد. لطفاً از روشن بودن سرور اطمینان حاصل کنید.';
+      } else {
+        errorMessage = error.message || 'خطای ناشناخته';
+      }
+
+      await showError('خطا', errorMessage);
     }
-  } catch (error) {
-    console.error(`Error extracting columns from ${file.name}:`, error);
-    if (files.length <= 1) setAvailableColumns([]);
-    
-    let errorMessage = 'خطا در اتصال به سرور';
-    
-    // استفاده از error به جای response
-    if (error.code === 'ECONNABORTED') {
-      errorMessage = 'پاسخ سرور دیر شد. لطفاً دوباره تلاش کنید.';
-    } else if (error.response) {
-      // ✅ اینجا از error.response استفاده می‌کنیم
-      errorMessage = `خطای سرور: ${error.response.data?.error || error.response.statusText}`;
-    } else if (error.request) {
-      errorMessage = 'اتصال به سرور برقرار نشد. لطفاً از روشن بودن سرور اطمینان حاصل کنید.';
-    } else {
-      errorMessage = error.message || 'خطای ناشناخته';
-    }
-    
-    await showError('خطا', errorMessage);
-  }
-};
+  };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
@@ -626,7 +626,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.MERGE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -635,7 +635,7 @@ const extractColumnsFromFile = async (file) => {
           if (selectedColumn) formData.append('column_name', selectedColumn);
           response = await axios.post(API_ENDPOINTS.REMOVE_DUPLICATES, formData, {
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -644,7 +644,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('target_format', targetFormat);
           response = await axios.post(API_ENDPOINTS.CONVERT_FORMAT, formData, {
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -656,7 +656,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.COMPARE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -671,7 +671,7 @@ const extractColumnsFromFile = async (file) => {
           }
           response = await axios.post(API_ENDPOINTS.CLEAN_DATA, formData, {
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -682,7 +682,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('aggregation', pivotParams.aggregation);
           response = await axios.post(API_ENDPOINTS.CREATE_PIVOT, formData, {
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -695,7 +695,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.JOIN_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            
+
           });
           break;
 
@@ -2078,8 +2078,36 @@ const extractColumnsFromFile = async (file) => {
           </div>
         </div>
       )}
+
     </>
   );
 }
+// config/api.js
+const getApiBaseUrl = () => {
+  if (import.meta.env.DEV) {
+    return "http://localhost:8000";
+  }
+  return "https://sheetmagic-backend-production.up.railway.app";
+};
 
+const API_BASE_URL = getApiBaseUrl();
+
+// ✅ اصلاح نام endpointها + اضافه کردن endpoint نظرسنجی
+const API_ENDPOINTS = {
+  MERGE_FILES: `${API_BASE_URL}/merge-files/`,
+  CONVERT_FORMAT: `${API_BASE_URL}/convert-format/`,
+  REMOVE_DUPLICATES: `${API_BASE_URL}/remove-duplicates/`,
+  GET_COLUMNS: `${API_BASE_URL}/get-columns/`,
+  COMPARE_FILES: `${API_BASE_URL}/compare-files/`,
+  CLEAN_DATA: `${API_BASE_URL}/clean-data/`,
+  CREATE_PIVOT: `${API_BASE_URL}/create-pivot/`,
+  JOIN_FILES: `${API_BASE_URL}/join-files/`,
+  SUBMIT_FEEDBACK: `${API_BASE_URL}/submit-feedback/`,
+};
+
+console.log('🚀 API Configuration Loaded');
+console.log('Base URL:', API_BASE_URL);
+console.log('Endpoints:', API_ENDPOINTS);
+
+export { API_ENDPOINTS, API_BASE_URL };
 export default App;
