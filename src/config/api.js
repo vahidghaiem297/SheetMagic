@@ -1,12 +1,12 @@
 // تشخیص خودکار آدرس API بر اساس محیط
 const getApiBaseUrl = () => {
   if (window.location.hostname.includes('github.io')) {
-    return "sheetmagic-backend-production.up.railway.app";
+    return "https://sheetmagic-backend-production.up.railway.app";
   }
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     return "http://localhost:8000";
   }
-  return "sheetmagic-backend-production.up.railway.app";
+  return "https://sheetmagic-backend-production.up.railway.app";
 };
 
 const API_BASE_URL = getApiBaseUrl();
