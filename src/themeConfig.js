@@ -7,21 +7,23 @@ export const lightTheme = {
     primaryDark: '#5a6fd8',
     secondary: '#764ba2',
     accent: '#CB3CFF',
-    logoColor:'#031E36',
+    logoColor: '#031E36',
     
     // رنگ‌های پس‌زمینه
     bgcolor: '#fff',
     surface: '#FFFFFF',
     headerBg: '#031E36',
     cardBg: '#FFFFFF',
-    uploadArea:'transparent',
+    uploadArea: 'transparent',
     
     // رنگ‌های متن
     textPrimary: '#212121',
     textSecondary: '#757575',
     textInverse: '#212121',
     textMuted: '#6c757d',
-    swalTitle:'#212121',
+    optTitles: '#212121', // عناوین عملیات
+    swalTitle: '#212121', // عنوان SweetAlert
+    
     // رنگ‌های وضعیت
     success: '#4CAF50',
     successLight: '#e8f5e8',
@@ -44,7 +46,8 @@ export const lightTheme = {
     btnSecondary: '#FDB52A',
     btnSecondaryHover: '#21C3FC',
     btnDisabled: 'rgba(189, 189, 189, .2)',
-    colorDisabled:'#BDBDBD',
+    colorDisabled: '#BDBDBD',
+    btnWorkflow: 'rgba(3, 30, 54, 0.1)', // دکمه‌های workflow
     
     // رنگ‌های خاص کامپوننت‌ها
     uploadAreaBg: 'rgba(20, 55, 90, 0.1)',
@@ -55,7 +58,16 @@ export const lightTheme = {
     operationCardBorder: '#e9ecef',
     modalBg: '#FFFFFF',
     modalHeaderBg: '#f8f9fa',
-    stepBgLine:'#E0E0E0',
+    stepBgLine: '#E0E0E0',
+    
+    // رنگ‌های اضافی برای consistency
+    stepNumberBg: '#E0E0E0',
+    stepNumberColor: '#212121',
+    filePreviewBg: '#f9f9f9',
+    filePreviewBorder: '#e9ecef',
+    selectBg: '#FFFFFF',
+    selectBorder: '#e9ecef',
+    selectColor: '#212121'
   }
 };
 
@@ -67,20 +79,23 @@ export const darkTheme = {
     primaryDark: '#7b8ef0',
     secondary: '#9d6bd9',
     accent: '#d96bff',
-    logoColor:'#fff',
-    // رنگ‌های پس‌زمینه-webkit-linear-gradient(to right, #',
-    surface: '#ffffff',
+    logoColor: '#ffffff',
+    
+    // رنگ‌های پس‌زمینه
+    bgcolor: '#0F2027',
+    surface: '#1a1f3c',
     headerBg: '#0d1a30',
-    cardBg: 'rgba(3, 30, 54, .8)',
-    bgcolor:'#0F2027',
-    uploadArea:'transparent',
+    cardBg: 'rgba(3, 30, 54, 0.8)',
+    uploadArea: 'transparent',
+    
     // رنگ‌های متن
     textPrimary: '#ffffff',
     textSecondary: '#b8b9c7',
-    textInverse: '#fff',
+    textInverse: '#ffffff',
     textMuted: '#8a8da3',
-    optTitles:'#212121',
-    swalTitle:'#212121',
+    optTitles: '#ffffff', // عناوین روشن برای تم تاریک
+    swalTitle: '#ffffff', // عنوان روشن برای SweetAlert
+    
     // رنگ‌های وضعیت
     success: '#5cdb60',
     successLight: '#1a3d1a',
@@ -92,6 +107,7 @@ export const darkTheme = {
     infoLight: '#1a2f3d',
     
     // رنگ‌های border و shadow
+    border: '#2a2f4c',
     borderLight: '#1e2339',
     shadow: 'rgba(0, 0, 0, 0.3)',
     shadowLight: 'rgba(0, 0, 0, 0.2)',
@@ -101,6 +117,9 @@ export const darkTheme = {
     btnPrimaryHover: '#b84de6',
     btnSecondary: '#ffc94d',
     btnSecondaryHover: '#4dc9ff',
+    btnDisabled: 'rgba(189, 189, 189, 0.2)',
+    colorDisabled: '#BDBDBD',
+    btnWorkflow: 'rgba(255, 255, 255, 0.1)', // دکمه‌های workflow در تم تاریک
     
     // رنگ‌های خاص کامپوننت‌ها
     uploadAreaBg: 'rgba(137, 81, 255, 0.1)',
@@ -111,7 +130,16 @@ export const darkTheme = {
     operationCardBorder: '#2a2f4c',
     modalBg: '#1a1f3c',
     modalHeaderBg: '#0d1a30',
-    stepBgLine:'#E0E0E0',
+    stepBgLine: '#2a2f4c',
+    
+    // رنگ‌های اضافی برای consistency
+    stepNumberBg: '#2a2f4c',
+    stepNumberColor: '#ffffff',
+    filePreviewBg: '#1e2339',
+    filePreviewBorder: '#2a2f4c',
+    selectBg: '#1a1f3c',
+    selectBorder: '#2a2f4c',
+    selectColor: '#ffffff'
   }
 };
 
@@ -129,6 +157,15 @@ export const applyTheme = (theme) => {
   setTimeout(() => {
     document.body.classList.remove('theme-transition');
   }, 300);
+  
+  // اضافه کردن کلاس به body برای استایل‌های خاص
+  if (theme.name === 'dark') {
+    document.body.classList.add('dark-theme');
+    document.body.classList.remove('light-theme');
+  } else {
+    document.body.classList.add('light-theme');
+    document.body.classList.remove('dark-theme');
+  }
 };
 
 // تابع برای دریافت تم فعلی
@@ -139,4 +176,12 @@ export const getCurrentTheme = () => {
 // تابع برای ذخیره تم
 export const saveTheme = (theme) => {
   localStorage.setItem('preferred-theme', theme);
+};
+
+// تابع برای مقداردهی اولیه تم
+export const initializeTheme = () => {
+  const savedTheme = getCurrentTheme();
+  const themeToApply = savedTheme === 'light' ? lightTheme : darkTheme;
+  applyTheme(themeToApply);
+  return savedTheme;
 };

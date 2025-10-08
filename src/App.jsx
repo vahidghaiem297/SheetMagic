@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from "./config/api.js";
-import { lightTheme, darkTheme, applyTheme, getCurrentTheme, saveTheme } from './themeConfig.js';
+import { lightTheme, darkTheme, applyTheme, getCurrentTheme, saveTheme, initializeTheme } from './themeConfig.js';
 import { useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -10,6 +10,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './index.css';
 import './fonts/fonts.css';
+
+
 
 const getImagePath = (filename) => {
   if (window.location.hostname.includes('github.io')) {
@@ -74,6 +76,11 @@ function App() {
   const joinLeftKeyRef = useRef(null);
   const joinRightKeyRef = useRef(null);
   const joinTypeRef = useRef(null);
+
+  // در useEffect اولیه:
+  useEffect(() => {
+    initializeTheme(); // این جایگزین کد قبلی شود
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
