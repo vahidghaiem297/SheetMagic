@@ -11,9 +11,10 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './index.css';
 import './fonts/fonts.css';
 
-
-// تابع برای مدیریت مسیر تصاویر
 const getImagePath = (filename) => {
+  if (window.location.hostname.includes('github.io')) {
+    return `/SheetMagic/img/${filename}`;
+  }
   return `/img/${filename}`;
 };
 
