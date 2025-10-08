@@ -503,7 +503,7 @@ const extractColumnsFromFile = async (file) => {
 
   try {
     const response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
-      timeout: 30000,
+      
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -626,7 +626,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.MERGE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            timeout: 30000,
+            
           });
           break;
 
@@ -635,7 +635,7 @@ const extractColumnsFromFile = async (file) => {
           if (selectedColumn) formData.append('column_name', selectedColumn);
           response = await axios.post(API_ENDPOINTS.REMOVE_DUPLICATES, formData, {
             responseType: 'blob',
-            timeout: 60000,
+            
           });
           break;
 
@@ -644,7 +644,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('target_format', targetFormat);
           response = await axios.post(API_ENDPOINTS.CONVERT_FORMAT, formData, {
             responseType: 'blob',
-            timeout: 60000,
+            
           });
           break;
 
@@ -656,7 +656,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.COMPARE_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            timeout: 30000,
+            
           });
           break;
 
@@ -671,7 +671,7 @@ const extractColumnsFromFile = async (file) => {
           }
           response = await axios.post(API_ENDPOINTS.CLEAN_DATA, formData, {
             responseType: 'blob',
-            timeout: 120000,
+            
           });
           break;
 
@@ -682,7 +682,7 @@ const extractColumnsFromFile = async (file) => {
           formData.append('aggregation', pivotParams.aggregation);
           response = await axios.post(API_ENDPOINTS.CREATE_PIVOT, formData, {
             responseType: 'blob',
-            timeout: 120000,
+            
           });
           break;
 
@@ -695,7 +695,7 @@ const extractColumnsFromFile = async (file) => {
           response = await axios.post(API_ENDPOINTS.JOIN_FILES, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
-            timeout: 30000,
+            
           });
           break;
 
