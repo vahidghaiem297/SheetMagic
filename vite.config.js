@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/your-repo-name/', // مهم! اسم ریپوی تو رو بذار
+  base: 'https://github.com/vahidghaiem297/SheetMagic.git', // مهم! اسم ریپوی تو رو بذار
    build: {
     outDir: 'dist',
     sourcemap: false,
