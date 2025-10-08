@@ -9,7 +9,7 @@ const getApiBaseUrl = () => {
   
   // اگر در localhost هستیم (توسعه)
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return "https://sheetmagic-backend-production.up.railway.app";
+    return "https://sheetmagic-backend-production.up.railway.app"; // تغییر به HTTPS
   }
   
   // برای سایر موارد (production)
