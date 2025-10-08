@@ -503,7 +503,7 @@ const extractColumnsFromFile = async (file) => {
 
   try {
       response = await axios.post(API_ENDPOINTS.GET_COLUMNS, formData, {
-      timeout: 30000,
+      timeout: 120000,
       headers: {
         'Content-Type': 'multipart/form-data'
       }
