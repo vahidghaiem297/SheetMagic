@@ -848,10 +848,6 @@ select:focus,
     align-items: center;
   }
 
-  .btn-workflow {
-    width: 200px;
-    justify-content: center;
-  }
 
   .files-columns-container {
     grid-template-columns: 1fr;
@@ -883,10 +879,6 @@ select:focus,
     gap: 10px;
   }
 
-  .btn-workflow {
-    padding: 10px 20px;
-    font-size: 13px;
-  }
 
   .step-content h2 {
     font-size: 1.3rem;
